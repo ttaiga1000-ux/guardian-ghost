@@ -115,18 +115,21 @@
 
 
 .bubble {
+  display: inline-block;
   max-width: 85%;
+  width: auto;
+  min-height: auto;
   padding: 10px 14px;
-  border-radius: 20px;
+  border-radius: 18px;
   font-size: 15px;
   line-height: 1.6;
   box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-  word-wrap: break-word;
+  background: rgba(128, 90, 213, 0.2);
   word-break: break-word;
-  white-space: normal;
-  display: inline-block;
-  animation: pop 0.2s ease-out;
+  white-space: pre-wrap;
   overflow-wrap: anywhere;
+  overflow: visible;
+  align-self: flex-start;
 }
 
       .bubble.user {
@@ -426,6 +429,7 @@ startQR();
     </script>
   </body>
 </html>
+
 
 
 
