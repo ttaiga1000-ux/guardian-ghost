@@ -337,8 +337,11 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
               <div style={{ textAlign: "center", fontSize: 13, color: "#94a3b8" }}>
                 {t.remaining}: {formatTime(timeLeft)}
               </div>
-              <GhostSVG color={PERSONALITIES[personality].color} />
-              <div className="chat" ref={chatRef}>
+            <div style={{ textAlign: "center", marginBottom: "8px" }}>
+  <GhostSVG color={PERSONALITIES[personality].color} />
+</div>
+<div className="chat" ref={chatRef}>
+
                 {messages.map((m, i) => (
                   <div key={i} className={`bubble ${m.from}`}>{m.text}</div>
                 ))}
@@ -423,6 +426,7 @@ startQR();
     </script>
   </body>
 </html>
+
 
 
 
