@@ -95,14 +95,24 @@
         justify-content: center;
       }
 
-      .chat {
-        flex: 1;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding-right: 4px;
-      }
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 6px 10px;
+  scroll-behavior: smooth;
+}
+
+.chat::-webkit-scrollbar {
+  width: 5px;
+}
+.chat::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
+
 
 .bubble {
   max-width: 85%;
@@ -413,6 +423,7 @@ startQR();
     </script>
   </body>
 </html>
+
 
 
 
