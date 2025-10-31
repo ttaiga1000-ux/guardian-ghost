@@ -98,45 +98,19 @@
         padding-right: 4px;
       }
 
-     .bubble {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-  word-wrap: break-word;
-  word-break: break-word;
-  white-space: pre-wrap;
-  max-width: 75%;
-  overflow-wrap: break-word;
-  animation: pop 0.2s ease-out;
-  box-sizing: border-box;
-}
-
-.chat {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-right: 6px;
-}
-
-.bubble.user {
-  align-self: flex-end;
-  background: rgba(255, 255, 255, 0.9);
-  color: #0b0f17;
-  border-bottom-right-radius: 6px;
-}
-
-.bubble.ghost {
-  align-self: flex-start;
-  background: rgba(179, 146, 255, 0.9);
-  color: #0b0f17;
-  border-bottom-left-radius: 6px;
-}
-
+      .bubble {
+        max-width: 80%;
+        padding: 10px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        line-height: 1.5;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: pre-wrap;
+        display: inline-block;
+        animation: pop 0.2s ease-out;
+      }
 
       .bubble.user {
         align-self: flex-end;
@@ -399,4 +373,3 @@
     </script>
   </body>
 </html>
-
