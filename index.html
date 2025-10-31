@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Guardian Ghost Demo</title>
 
-    <!-- React + ReactDOM + Babel -->
+    <!-- React + Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.26.0/babel.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
       :root {
@@ -21,35 +22,37 @@
         --glass: rgba(255, 255, 255, 0.03);
       }
 
-      html, body, #root {
+      html,
+      body,
+      #root {
         height: 100%;
         margin: 0;
       }
 
       body {
         background: radial-gradient(1200px 600px at 10% 10%, rgba(179,146,255,0.05), transparent),
-          radial-gradient(1200px 600px at 90% 90%, rgba(110,231,183,0.04), transparent),
-          var(--bg);
+          radial-gradient(1200px 600px at 90% 90%, rgba(110,231,183,0.04), transparent), var(--bg);
         color: #e6eef8;
-        font-family: "Hiragino Kaku Gothic ProN","Noto Sans JP","Inter",sans-serif;
+        font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Inter", sans-serif;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
       }
 
+      /* --- Phone container --- */
       .phone {
         width: min(360px, 92vw);
         height: min(720px, 88vh);
         border-radius: 28px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-        box-shadow: 0 10px 40px rgba(2,6,23,0.7);
-        border: 1px solid rgba(255,255,255,0.03);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+        box-shadow: 0 10px 40px rgba(2, 6, 23, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.03);
         padding: 18px;
-        position: relative;
-        overflow: hidden;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
+        position: relative;
       }
 
       header.app-header {
@@ -66,24 +69,20 @@
         background: var(--glass);
         color: var(--muted);
         cursor: pointer;
-        border: 1px solid rgba(255,255,255,0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
 
-      .screen {
-        margin-top: 6px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-        border-radius: 18px;
-        padding: 14px;
+      .chat-screen {
         flex: 1;
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        overflow: hidden;
+        gap: 10px;
       }
 
       .ghost {
-        width: 84px;
-        height: 84px;
+        width: 90px;
+        height: 90px;
+        margin: 10px auto;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -95,7 +94,7 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-        padding-right: 4px;
+        padding: 8px;
       }
 
       .bubble {
@@ -104,24 +103,22 @@
         border-radius: 20px;
         font-size: 14px;
         line-height: 1.5;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-        word-wrap: break-word;
         word-break: break-word;
         white-space: pre-wrap;
-        display: inline-block;
         animation: pop 0.2s ease-out;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
 
       .bubble.user {
         align-self: flex-end;
-        background: rgba(255,255,255,0.9);
+        background: rgba(255, 255, 255, 0.9);
         color: #0b0f17;
         border-bottom-right-radius: 4px;
       }
 
       .bubble.ghost {
         align-self: flex-start;
-        background: rgba(179,146,255,0.9);
+        background: rgba(179, 146, 255, 0.9);
         color: #0b0f17;
         border-bottom-left-radius: 4px;
       }
@@ -130,14 +127,15 @@
         display: flex;
         gap: 8px;
         align-items: center;
+        padding: 8px 0;
       }
 
       input.msg {
         flex: 1;
         padding: 10px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.02);
-        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
         color: #e6eef8;
         outline: none;
         font-size: 14px;
@@ -151,43 +149,81 @@
         font-weight: 700;
         cursor: pointer;
         color: #071322;
+        transition: 0.3s;
+      }
+
+      button.send:hover {
+        background: var(--accent);
       }
 
       @keyframes pop {
-        from { transform: scale(0.8); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
-      .screen { display: none; text-align: center; animation: fadeIn 1.5s ease-in-out; }
-      .active { display: block; }
+      /* --- Screen switching --- */
+      .screen {
+        display: none;
+        text-align: center;
+        animation: fadeIn 1.5s ease-in-out;
+      }
+
+      .active {
+        display: block;
+      }
 
       button {
-        background: white; color: black; border: none;
-        padding: 15px 30px; font-size: 1.1em;
-        border-radius: 10px; cursor: pointer; transition: 0.3s; margin-top: 15px;
+        background: white;
+        color: black;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.1em;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 15px;
       }
-      button:hover { background: #222; color: white; border: 1px solid white; }
 
-      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      button:hover {
+        background: #222;
+        color: white;
+        border: 1px solid white;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
     </style>
   </head>
 
   <body>
-    <!-- スタートメニュー画面 -->
+    <!-- Start Screen -->
     <div id="start-screen" class="screen active">
       <h1>👻 Guardian Ghost</h1>
       <p>ようこそ。ゴーストに会う準備はできた？</p>
       <button id="scanButton">スキャンモードを開始</button>
     </div>
 
-    <!-- QRスキャンモード（仮の画面） -->
+    <!-- Scan Screen -->
     <div id="scan-screen" class="screen">
       <h1>🔍 スキャンモード</h1>
-      <p>（ここにQRスキャン機能を後で追加します）</p>
+      <div id="qr-reader" style="width: 260px; margin: 20px auto;"></div>
+      <p id="qr-result"></p>
       <button id="goToGhost">ゴーストの世界へ</button>
     </div>
 
-    <!-- ゴーストアプリ本体 -->
+    <!-- Ghost App -->
     <div id="ghost-app" class="screen">
       <div id="root"></div>
     </div>
@@ -236,8 +272,11 @@
       function GhostSVG({ color }) {
         return (
           <div className="ghost" style={{ backgroundColor: color, borderRadius: "50%" }}>
-            <svg viewBox="0 0 128 128">
-              <path fill="#fff" d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"/>
+            <svg viewBox="0 0 128 128" width="60" height="60">
+              <path
+                fill="#fff"
+                d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
+              />
               <circle cx="46" cy="56" r="6" fill="#091019" />
               <circle cx="82" cy="56" r="6" fill="#091019" />
             </svg>
@@ -254,17 +293,22 @@
         const [active, setActive] = useState(true);
         const chatRef = useRef(null);
 
-        useEffect(() => { setMessages([{ from: "ghost", text: DICT[lang].welcome }]); }, [lang]);
-        useEffect(() => { if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight; }, [messages]);
+        useEffect(() => {
+          setMessages([{ from: "ghost", text: DICT[lang].welcome }]);
+        }, [lang]);
+
+        useEffect(() => {
+          if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }, [messages]);
 
         useEffect(() => {
           if (!active) return;
           const timer = setInterval(() => {
-            setTimeLeft(prev => {
+            setTimeLeft((prev) => {
               if (prev <= 1) {
                 clearInterval(timer);
                 setActive(false);
-                setMessages(prev => [...prev, { from: "ghost", text: t.timeUp }]);
+                setMessages((prev) => [...prev, { from: "ghost", text: t.timeUp }]);
                 return 0;
               }
               return prev - 1;
@@ -276,21 +320,23 @@
         const sendMessage = async () => {
           if (!input || !active) return;
           const userMsg = input;
-          setMessages(prev => [...prev, { from: "user", text: userMsg }]);
+          setMessages((prev) => [...prev, { from: "user", text: userMsg }]);
           setInput("");
 
           try {
-            const response = await fetch("http://localhost:3000/chat", {
+            const response = await fetch("https://guardian-ghost.onrender.com/chat", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ message: userMsg }),
+              body: JSON.stringify({
+                message: userMsg,
+                personality: PERSONALITIES[personality].system,
+              }),
             });
+
             const data = await response.json();
-            const ghostReplies = PERSONALITIES[personality].replies;
-            const reply = ghostReplies[Math.floor(Math.random() * ghostReplies.length)];
-            setMessages(prev => [...prev, { from: "ghost", text: reply }]);
+            setMessages((prev) => [...prev, { from: "ghost", text: data.reply }]);
           } catch (err) {
-            setMessages(prev => [
+            setMessages((prev) => [
               ...prev,
               { from: "ghost", text: "Connection lost... I can’t reach my world 👻" },
             ]);
@@ -307,20 +353,29 @@
           <div className="phone">
             <header className="app-header">
               <div style={{ fontWeight: 700, fontSize: 16 }}>{t.title}</div>
-              <button className="lang-toggle" onClick={() => setLang(lang === "ja" ? "en" : "ja")}>
+              <button
+                className="lang-toggle"
+                onClick={() => setLang(lang === "ja" ? "en" : "ja")}
+              >
                 {lang === "ja" ? t.english : t.japanese}
               </button>
             </header>
-           <main className="chat-screen">
+
+            <main className="chat-screen">
               <div style={{ textAlign: "center", fontSize: 13, color: "#94a3b8" }}>
                 {t.remaining}: {formatTime(timeLeft)}
               </div>
+
               <GhostSVG color={PERSONALITIES[personality].color} />
+
               <div className="chat" ref={chatRef}>
                 {messages.map((m, i) => (
-                  <div key={i} className={`bubble ${m.from}`}>{m.text}</div>
+                  <div key={i} className={`bubble ${m.from}`}>
+                    {m.text}
+                  </div>
                 ))}
               </div>
+
               <div className="input-area">
                 <input
                   className="msg"
@@ -330,46 +385,56 @@
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   disabled={!active}
                 />
-                <button className="send" onClick={sendMessage} disabled={!active}>→</button>
+                <button className="send" onClick={sendMessage} disabled={!active}>
+                  →
+                </button>
               </div>
             </main>
           </div>
         );
       }
 
-      // ✅ Start app and render with selected personality
-      let selectedPersonality = "kind"; // default
+      // --- QR and App startup logic ---
+      let selectedPersonality = "kind";
+      let qrReader;
 
       document.getElementById("scanButton").addEventListener("click", () => {
         document.getElementById("start-screen").classList.remove("active");
         document.getElementById("scan-screen").classList.add("active");
+        startQR();
       });
 
-     document.getElementById("goToGhost").addEventListener("click", () => {
-  const types = ["kind", "cool"];
-  selectedPersonality = types[Math.floor(Math.random() * types.length)];
-  alert(`選ばれた性格: ${selectedPersonality}`);
-  document.getElementById("scan-screen").classList.remove("active");
-  document.getElementById("ghost-app").classList.add("active");
+      function startQR() {
+        const qrResult = document.getElementById("qr-result");
+        qrReader = new Html5Qrcode("qr-reader");
 
-  // ✅ Reactが確実にDOMを読み込んでから起動
-  setTimeout(() => {
-    startApp();
-  }, 100);
-});
+        qrReader.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 200 },
+          (decodedText) => {
+            qrReader.stop();
+            qrResult.innerText = `Scanned: ${decodedText}`;
+            if (decodedText.includes("kind")) selectedPersonality = "kind";
+            else if (decodedText.includes("cool")) selectedPersonality = "cool";
+            else selectedPersonality = "kind";
 
+            alert(`選ばれた性格: ${selectedPersonality}`);
+            document.getElementById("scan-screen").classList.remove("active");
+            document.getElementById("ghost-app").classList.add("active");
+            setTimeout(() => startApp(), 300);
+          },
+          (errorMessage) => {}
+        );
+      }
 
-     function startApp() {
-  const rootEl = document.getElementById("root");
-  if (!rootEl) {
-    console.error("Root element not found!");
-    return;
-  }
-  ReactDOM.createRoot(rootEl).render(
-    <App personality={selectedPersonality} />
-  );
-}
-
+      function startApp() {
+        const rootEl = document.getElementById("root");
+        if (!rootEl) {
+          console.error("Root element not found!");
+          return;
+        }
+        ReactDOM.createRoot(rootEl).render(<App personality={selectedPersonality} />);
+      }
     </script>
   </body>
 </html>
