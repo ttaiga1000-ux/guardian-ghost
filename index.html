@@ -129,22 +129,43 @@
 
 
 .bubble {
-  display: inline-block; /* allows bubble height to expand naturally */
+  display: inline-block;
   max-width: 85%;
   padding: 10px 14px;
   border-radius: 18px;
   font-size: 15px;
-  line-height: 1.6;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-  background: rgba(128, 90, 213, 0.2);
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: rgba(128, 90, 213, 0.15);
   color: #0b0f17;
   word-break: break-word;
   white-space: pre-wrap;
-  overflow-wrap: anywhere; /* ensures words break nicely */
-  margin-bottom: 6px;
-  height: auto; /* this is important */
-  overflow: visible; /* no clipping */
+  overflow-wrap: anywhere;
+  margin-bottom: 8px;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
 }
+
+/* Long messages get internal scroll */
+.bubble.long {
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.2) transparent;
+}
+.user .bubble {
+  background: rgba(80, 220, 180, 0.25);
+  font-weight: 600;
+}
+
+.ai .bubble {
+  background: rgba(128, 90, 213, 0.15);
+  color: #222;
+}
+
 
 
 
@@ -443,10 +464,20 @@ startQR();
     <App personality={selectedPersonality} />
   );
 }
+// Auto-detect long messages
+function adjustBubbleHeight() {
+  document.querySelectorAll(".bubble").forEach(bubble => {
+    if (bubble.scrollHeight > 200) {
+      bubble.classList.add("long");
+    }
+  });
+}
+setInterval(adjustBubbleHeight, 500);
 
     </script>
   </body>
 </html>
+
 
 
 
