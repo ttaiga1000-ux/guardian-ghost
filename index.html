@@ -104,6 +104,20 @@
   padding: 0 6px 10px;
   scroll-behavior: smooth;
 }
+.chat-message {
+  display: flex;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.chat-message.user {
+  justify-content: flex-end;
+}
+
+.chat-message.ghost {
+  justify-content: flex-start;
+}
 
 .chat::-webkit-scrollbar {
   width: 5px;
@@ -343,11 +357,13 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
   <GhostSVG color={PERSONALITIES[personality].color} />
 </div>
 <div className="chat" ref={chatRef}>
+  {messages.map((m, i) => (
+    <div key={i} className={`chat-message ${m.from}`}>
+      <div className={`bubble ${m.from}`}>{m.text}</div>
+    </div>
+  ))}
+</div>
 
-                {messages.map((m, i) => (
-                  <div key={i} className={`bubble ${m.from}`}>{m.text}</div>
-                ))}
-              </div>
               <div className="input-area">
                 <input
                   className="msg"
@@ -428,6 +444,7 @@ startQR();
     </script>
   </body>
 </html>
+
 
 
 
