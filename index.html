@@ -151,23 +151,49 @@
   transition: all 0.3s ease;
 }
 
-/* Long messages get internal scroll */
+.bubble {
+  display: inline-block;
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: rgba(128, 90, 213, 0.15);
+  color: #0b0f17;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-bottom: 8px;
+  height: auto;
+  overflow: visible; /* allow tall text */
+  transition: all 0.3s ease;
+}
+
+/* For long messages, give internal scroll only if necessary */
 .bubble.long {
-  max-height: 180px;
+  max-height: 250px; /* increased for tall messages */
   overflow-y: auto;
   padding-right: 10px;
   scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,0.2) transparent;
-}
-.user .bubble {
-  background: rgba(80, 220, 180, 0.25);
-  font-weight: 600;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
 
-.ai .bubble {
-  background: rgba(128, 90, 213, 0.15);
-  color: #222;
+/* user’s messages (right side) */
+.user .bubble {
+  background: rgba(80, 220, 180, 0.25);
+  color: white;
+  font-weight: 600;
+  align-self: flex-end;
 }
+
+/* ghost’s messages (left side) */
+.ghost .bubble {
+  background: rgba(179, 146, 255, 0.25);
+  color: white;
+  align-self: flex-start;
+}
+
 
 
 
@@ -489,6 +515,7 @@ setInterval(adjustBubbleHeight, 500);
     </script>
   </body>
 </html>
+
 
 
 
