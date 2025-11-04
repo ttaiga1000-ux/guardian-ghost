@@ -72,17 +72,27 @@
       }
 
 /* ---------- chat container ---------- */
+.chat-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
 .chat {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* ✅ iPhone smooth scroll */
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 16px;
-  padding-bottom: 100px; /* enough space for input bar */
+  padding-bottom: 120px; /* ✅ make space for input bar */
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
+
 
 /* each message row (wraps a bubble) */
 .chat-message {
@@ -211,6 +221,7 @@ button.send {
   border-radius: 10px;
 }
 
+      
     </style>
   </head>
 
@@ -461,20 +472,22 @@ setInterval(adjustBubbleHeight, 500);
       // Keep chat scrolled to bottom automatically
 function scrollToBottom() {
   const chat = document.querySelector(".chat");
-  if (chat) {
-    chat.scrollTop = chat.scrollHeight;
-  }
+  if (chat) chat.scrollTop = chat.scrollHeight;
 }
 
-// Scroll when messages change or input focus
-const observer = new MutationObserver(scrollToBottom);
-observer.observe(document.body, { childList: true, subtree: true });
+const chat = document.querySelector(".chat");
+if (chat) {
+  const observer = new MutationObserver(scrollToBottom);
+  observer.observe(chat, { childList: true });
+}
 
 window.addEventListener("focusin", scrollToBottom);
+window.addEventListener("resize", scrollToBottom);
 
     </script>
   </body>
 </html>
+
 
 
 
