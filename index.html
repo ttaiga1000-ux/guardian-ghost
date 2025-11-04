@@ -473,21 +473,9 @@ observer.observe(document.body, { childList: true, subtree: true });
 window.addEventListener("focusin", scrollToBottom);
 
     </script>
-    // auto scroll to bottom when new messages are added
-function scrollToBottom() {
-  const chat = document.querySelector(".chat");
-  if (chat) chat.scrollTop = chat.scrollHeight;
-}
-
-const chat = document.querySelector(".chat");
-const observer = new MutationObserver(scrollToBottom);
-observer.observe(chat, { childList: true });
-
-window.addEventListener("focusin", scrollToBottom);
-window.addEventListener("resize", scrollToBottom);
-
   </body>
 </html>
+
 
 
 
