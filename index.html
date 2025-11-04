@@ -49,22 +49,19 @@
   background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
   box-shadow: 0 10px 40px rgba(2,6,23,0.7);
   border: 1px solid rgba(255,255,255,0.03);
-  padding: 12px;
-  position: relative;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-
-  /* ✅ Allow scrolling when chat grows */
   overflow: hidden;
+  position: relative;
 }
-
 .screen.active {
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow-y: auto; /* ✅ enable scrolling */
+  overflow: hidden;
 }
+
 
       .ghost {
         width: 84px;
@@ -80,9 +77,10 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;               /* smaller vertical spacing */
-  padding: 6px 16px 110px;/* big bottom padding so last message isn't hidden by input on mobile */
+  gap: 10px;
+  padding: 10px 16px 90px; /* enough space for input bar */
   scroll-behavior: smooth;
+  box-sizing: border-box;
 }
 
 /* each message row (wraps a bubble) */
@@ -144,7 +142,7 @@
   scrollbar-width: thin;
 }
 
-/* ---------- input area (keeps fixed visual footprint) ---------- */
+/* ✅ input area fixed but above keyboard */
 .input-area {
   display: flex;
   align-items: center;
@@ -152,13 +150,14 @@
   padding: 10px;
   background: rgba(255,255,255,0.03);
   border-radius: 999px;
-  position: absolute;    /* make input sit above chat at bottom */
-  left: 18px;
-  right: 18px;
-  bottom: 18px;
+  position: fixed; /* fixed instead of absolute */
+  left: 0;
+  right: 0;
+  bottom: env(safe-area-inset-bottom, 0);
+  max-width: 420px;
+  margin: 0 auto;
   box-sizing: border-box;
 }
-
 /* ensure the input itself grows */
 input.msg {
   flex: 1;
@@ -455,9 +454,25 @@ function adjustBubbleHeight() {
 }
 setInterval(adjustBubbleHeight, 500);
 
+
+      // Keep chat scrolled to bottom automatically
+function scrollToBottom() {
+  const chat = document.querySelector(".chat");
+  if (chat) {
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+
+// Scroll when messages change or input focus
+const observer = new MutationObserver(scrollToBottom);
+observer.observe(document.body, { childList: true, subtree: true });
+
+window.addEventListener("focusin", scrollToBottom);
+
     </script>
   </body>
 </html>
+
 
 
 
