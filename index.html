@@ -111,22 +111,22 @@
 /* ---------- bubble visual ---------- */
 /* Use block layout so width control works reliably */
 .bubble {
-  display: block;
-  /* make width relative so bubble is wider and not super-tall */
-  max-width: calc(100% - 90px); /* keep some margin for avatar/input area */
-  width: auto;
+  display: inline-block;
+  max-width: 85%;          /* ✅ keep bubble wide but never cut */
+  min-width: 40px;
   padding: 12px 16px;
   border-radius: 18px;
   font-size: 15px;
-  line-height: 1.45;
+  line-height: 1.5;
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   word-break: break-word;
-  white-space: normal;   /* allow normal wrapping */
+  white-space: pre-wrap;   /* ✅ preserve line breaks safely */
   overflow-wrap: break-word;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   background: rgba(128, 90, 213, 0.15);
   color: #fff;
 }
+
 
 /* differentiate left / right but avoid extra stacking behavior */
 .bubble.ghost {
@@ -487,6 +487,7 @@ window.addEventListener("resize", scrollToBottom);
     </script>
   </body>
 </html>
+
 
 
 
