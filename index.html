@@ -78,9 +78,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 10px 16px 90px; /* enough space for input bar */
-  scroll-behavior: smooth;
+  padding: 16px;
+  padding-bottom: 100px; /* enough space for input bar */
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 /* each message row (wraps a bubble) */
@@ -143,21 +144,23 @@
 }
 
 /* ✅ input area fixed but above keyboard */
+/* ✅ input area fixed above keyboard & not overlapping messages */
 .input-area {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 420px;
+  background: rgba(20, 20, 30, 0.95);
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
-  background: rgba(255,255,255,0.03);
-  border-radius: 999px;
-  position: fixed; /* fixed instead of absolute */
-  left: 0;
-  right: 0;
-  bottom: env(safe-area-inset-bottom, 0);
-  max-width: 420px;
-  margin: 0 auto;
   box-sizing: border-box;
+  border-top: 1px solid rgba(255,255,255,0.1);
 }
+
 /* ensure the input itself grows */
 input.msg {
   flex: 1;
@@ -470,8 +473,22 @@ observer.observe(document.body, { childList: true, subtree: true });
 window.addEventListener("focusin", scrollToBottom);
 
     </script>
+    // auto scroll to bottom when new messages are added
+function scrollToBottom() {
+  const chat = document.querySelector(".chat");
+  if (chat) chat.scrollTop = chat.scrollHeight;
+}
+
+const chat = document.querySelector(".chat");
+const observer = new MutationObserver(scrollToBottom);
+observer.observe(chat, { childList: true });
+
+window.addEventListener("focusin", scrollToBottom);
+window.addEventListener("resize", scrollToBottom);
+
   </body>
 </html>
+
 
 
 
