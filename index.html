@@ -53,32 +53,18 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   box-sizing: border-box;
+
+  /* ✅ Allow scrolling when chat grows */
+  overflow: hidden;
 }
 
-
-      header.app-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 6px;
-      }
-
-   
-
-
-      .screen {
-        margin-top: 6px;
-        background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
-        border-radius: 18px;
-        padding: 14px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        overflow: hidden;
-      }
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto; /* ✅ enable scrolling */
+}
 
       .ghost {
         width: 84px;
@@ -472,6 +458,7 @@ setInterval(adjustBubbleHeight, 500);
     </script>
   </body>
 </html>
+
 
 
 
