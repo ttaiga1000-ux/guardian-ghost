@@ -341,10 +341,7 @@ button.send {
 
       };
 
-function GhostSVG({ personality }) {
-  const isKind = personality === "kind";
-
-  // 👻 ゴーストの色と表情設定
+     function GhostSVG({ personality }) {
   const bodyColor = isKind
     ? "rgba(255, 255, 255, 0.85)" // kind：透けた白
     : "rgba(135, 206, 250, 0.8)"; // cool：薄い青（skyblue）
@@ -368,33 +365,18 @@ function GhostSVG({ personality }) {
       }}
     >
       <svg viewBox="0 0 128 128" width="84" height="84">
-        {/* ゴーストの体 */}
         <path
           fill={bodyColor}
           d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
         />
-
-        {/* 👀 目 or サングラス */}
-        {isKind ? (
-          <>
-            <circle cx="46" cy="56" r="6" fill={eyeColor} />
-            <circle cx="82" cy="56" r="6" fill={eyeColor} />
-          </>
-        ) : (
-          <>
-            {/* 😎 サングラス */}
-            <rect x="38" y="50" width="22" height="10" rx="3" ry="3" fill="black" />
-            <rect x="68" y="50" width="22" height="10" rx="3" ry="3" fill="black" />
-            <rect x="60" y="54" width="8" height="3" fill="black" /> {/* ブリッジ */}
-          </>
-        )}
-
-        {/* 👄 口 */}
-        <path d={mouthStyle} stroke="#091019" strokeWidth="3" fill="none" />
+        <circle cx="46" cy="56" r="6" fill={eyeColor} />
+        <circle cx="82" cy="56" r="6" fill={eyeColor} />
+        <path d={mouthStyle} stroke={eyeColor} strokeWidth="3" fill="none" />
       </svg>
     </div>
   );
 }
+
 
       function App({ personality }) {
         const [lang, setLang] = useState("ja");
