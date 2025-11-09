@@ -7,58 +7,57 @@
 </head>
 
  <body>
-    <h1>Guardian Ghost 登録フォーム</h1>
-    <input type="email" id="email" placeholder="メールアドレスを入力" />
-    <button onclick="registerEmail()">登録</button>
-<!-- Firebase SDK -->
-    <script type="module">
-      // Firebaseのライブラリを読み込み
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+<!-- メール登録画面 -->
+<div id="register-screen" class="screen active">
+  <h1>Guardian Ghost 登録</h1>
+  <p>通知を受け取るメールアドレスを登録してください。</p>
+  <input type="email" id="email" placeholder="メールアドレスを入力" />
+  <button id="registerButton">登録</button>
+</div>
 
-     // 🔹ここにあなたのfirebaseConfigを貼り付けてください👇
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+   <!-- Firebase SDK -->
+  <!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  // あなたのFirebase設定をここに貼ってください👇
- // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  // 🔹あなたのFirebase設定をここに貼ってください👇
+  const firebaseConfig = {
+    apiKey: "あなたのAPIキー",
+    authDomain: "あなたのauthDomain",
+    projectId: "あなたのprojectId",
+    storageBucket: "あなたのstorageBucket",
+    messagingSenderId: "あなたのmessagingSenderId",
+    appId: "あなたのappId"
+  };
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCFOlj3yRFql7oDrjCSZ9iFdEiKuXGc9Yk",
-  authDomain: "guardian-ghost.firebaseapp.com",
-  projectId: "guardian-ghost",
-  storageBucket: "guardian-ghost.firebasestorage.app",
-  messagingSenderId: "431257152681",
-  appId: "1:431257152681:web:e7e66c1091b758a3598db8",
-  measurementId: "G-XYJT2SY7PS"
-};
+  // FirebaseアプリとFirestoreを初期化
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-      // FirebaseアプリとFirestoreを初期化
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+  // メール登録ボタンの動作
+  document.getElementById("registerButton").addEventListener("click", async () => {
+    const email = document.getElementById("email").value;
 
-      // フォーム送信処理
-      async function registerEmail() {
-        const email = document.getElementById("email").value;
-        try {
-          await addDoc(collection(db, "users"), { email: email });
-          alert("登録しました！");
-        } catch (e) {
-          console.error("Error adding document: ", e);
-        }
-      }
+    if (!email) {
+      alert("メールアドレスを入力してください。");
+      return;
+    }
 
-      window.registerEmail = registerEmail;
-    </script>
+    try {
+      await addDoc(collection(db, "users"), { email: email, createdAt: new Date() });
+      alert("登録しました！");
+
+      // ✅ 登録が終わったらメール登録画面を消してスタート画面へ進む
+      document.getElementById("register-screen").classList.remove("active");
+      document.getElementById("start-screen").classList.add("active");
+
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      alert("登録に失敗しました。");
+    }
+  });
+</script>
 
  
 
@@ -70,6 +69,14 @@ const firebaseConfig = {
 
 
     <style>
+#register-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
       :root {
         --bg: #0b0f17;
         --panel: #0f1720;
