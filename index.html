@@ -342,14 +342,15 @@ button.send {
       };
 
      function GhostSVG({ personality }) {
-  const bodyColor = isKind
-    ? "rgba(255, 255, 255, 0.85)" // kind：透けた白
-    : "rgba(135, 206, 250, 0.8)"; // cool：薄い青（skyblue）
+  const isKind = personality === "kind";
 
-  const eyeColor = isKind ? "#0b0f17" : "rgba(0,0,0,0)"; // coolは目を透明にしてサングラス描く
+  // それぞれの色と表情を変える
+  const bodyColor = isKind ? "rgba(179,146,255,0.9)" : "rgba(110,231,183,0.85)";
+  const eyeColor = isKind ? "#091019" : "#0c3a2d";
+  const mouthY = isKind ? 78 : 82; // coolのほうが少し下げる
   const mouthStyle = isKind
-    ? "M50,78 Q64,88 78,78" // kind：ニコニコ
-    : "M50,82 Q64,72 78,82"; // cool：無表情
+    ? "M50,78 Q64,88 78,78"
+    : "M50,82 Q64,72 78,82"; // kindはニコ、coolは無表情
 
   return (
     <div
@@ -359,9 +360,7 @@ button.send {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        animation: isKind
-          ? "float 3s ease-in-out infinite"
-          : "blink 5s linear infinite",
+        animation: isKind ? "float 3s ease-in-out infinite" : "blink 5s linear infinite",
       }}
     >
       <svg viewBox="0 0 128 128" width="84" height="84">
