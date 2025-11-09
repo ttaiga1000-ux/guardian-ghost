@@ -273,16 +273,6 @@ button.send {
     <div id="ghost-app" class="screen">
       <div id="root"></div>
     </div>
-<!-- メール登録画面 -->
-<div id="email-screen" class="screen">
-  <h1>📧 メール通知を登録</h1>
-  <input type="email" id="emailInput" placeholder="メールアドレスを入力" style="padding:10px;width:80%;max-width:300px;border-radius:8px;border:none;margin-top:10px;">
-  <br/>
-  <button id="registerEmailBtn">登録</button>
-  <br/>
-  <button id="backToChat">戻る</button>
-</div>
-
 
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
@@ -325,17 +315,43 @@ button.send {
         },
       };
 
-      function GhostSVG({ color }) {
-        return (
-          <div className="ghost" style={{ backgroundColor: color, borderRadius: "50%" }}>
-            <svg viewBox="0 0 128 128">
-              <path fill="#fff" d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"/>
-              <circle cx="46" cy="56" r="6" fill="#091019" />
-              <circle cx="82" cy="56" r="6" fill="#091019" />
-            </svg>
-          </div>
-        );
-      }
+     function GhostSVG({ color, personality }) {
+  return (
+    <div className="ghost" style={{ position: "relative" }}>
+      <svg viewBox="0 0 128 128" width="84" height="84">
+        {/* おばけの本体 */}
+        <path
+          fill={personality === "cool" ? "#3b82f6" : "#fff"} 
+          d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
+        />
+        {/* 目 */}
+        <circle cx="46" cy="56" r="6" fill="#091019" />
+        <circle cx="82" cy="56" r="6" fill="#091019" />
+      </svg>
+
+      {/* coolモードのときだけサングラス追加 */}
+      {personality === "cool" && (
+        <svg
+          viewBox="0 0 128 128"
+          width="84"
+          height="84"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            pointerEvents: "none",
+          }}
+        >
+          {/* サングラス */}
+          <rect x="36" y="50" width="20" height="10" rx="2" fill="#000" />
+          <rect x="72" y="50" width="20" height="10" rx="2" fill="#000" />
+          <rect x="56" y="53" width="16" height="4" fill="#000" />
+        </svg>
+      )}
+    </div>
+  );
+}
+
 
       function App({ personality }) {
         const [lang, setLang] = useState("ja");
@@ -396,33 +412,21 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
 
         return (
           <div className="phone">
-           <header className="app-header">
-  <div style={{ fontWeight: 700, fontSize: 16 }}>{t.title}</div>
-
-  {/* 📧 メールアイコン追加部分 */}
-  <div style={{ position: "absolute", right: "60px", top: "10px" }}>
-    <button
-      style={{ background: "transparent", border: "none", color: "#e6eef8", fontSize: "20px", cursor: "pointer" }}
-      onClick={() => {
-        document.getElementById("ghost-app").classList.remove("active");
-        document.getElementById("email-screen").classList.add("active");
-      }}
-    >
-      📧
-    </button>
-  </div>
-
-  <button className="lang-toggle" onClick={() => setLang(lang === "ja" ? "en" : "ja")}>
-    {lang === "ja" ? t.english : t.japanese}
-  </button>
-</header>
-
+            <header className="app-header">
+              <div style={{ fontWeight: 700, fontSize: 16 }}>{t.title}</div>
+              <button className="lang-toggle" onClick={() => setLang(lang === "ja" ? "en" : "ja")}>
+                {lang === "ja" ? t.english : t.japanese}
+              </button>
+            </header>
            <main className="chat-screen">
               <div style={{ textAlign: "center", fontSize: 13, color: "#94a3b8" }}>
                 {t.remaining}: {formatTime(timeLeft)}
               </div>
          <div style={{ textAlign: "center", margin: "4px 0 4px 0" }}>
-  <GhostSVG />
+ <div style={{ textAlign: "center", margin: "4px 0 4px 0" }}>
+  <GhostSVG personality={personality} />
+</div>
+
 </div>
 
 <div className="chat" ref={chatRef}>
@@ -534,24 +538,6 @@ if (chat) {
 
 window.addEventListener("focusin", scrollToBottom);
 window.addEventListener("resize", scrollToBottom);
-
- // メール登録画面の戻るボタン動作
-  document.getElementById("backToChat").addEventListener("click", () => {
-    document.getElementById("email-screen").classList.remove("active");
-    document.getElementById("ghost-app").classList.add("active");
-  });
-
-  // メール登録ボタンの仮動作（今はアラートで確認）
-  document.getElementById("registerEmailBtn").addEventListener("click", () => {
-    const email = document.getElementById("emailInput").value.trim();
-    if (!email) {
-      alert("メールアドレスを入力してください。");
-      return;
-    }
-    alert("登録完了: " + email + " 👻");
-    document.getElementById("email-screen").classList.remove("active");
-    document.getElementById("ghost-app").classList.add("active");
-  });
 
     </script>
   </body>
