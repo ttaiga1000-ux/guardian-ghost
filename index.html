@@ -325,17 +325,47 @@ button.send {
         },
       };
 
-      function GhostSVG({ color }) {
-        return (
-          <div className="ghost" style={{ backgroundColor: color, borderRadius: "50%" }}>
-            <svg viewBox="0 0 128 128">
-              <path fill="#fff" d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"/>
-              <circle cx="46" cy="56" r="6" fill="#091019" />
-              <circle cx="82" cy="56" r="6" fill="#091019" />
-            </svg>
-          </div>
-        );
-      }
+      function GhostSVG({ color, personality }) {
+  return (
+    <div className="ghost" style={{ backgroundColor: "transparent" }}>
+      <svg viewBox="0 0 128 128" width="84" height="84">
+        {/* ゴースト本体 */}
+        <path
+          fill={personality === "cool" ? "rgba(100,180,255,0.9)" : "#fff"}
+          d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
+        />
+
+        {/* kind モード: 通常の目 */}
+        {personality === "kind" && (
+          <>
+            <circle cx="46" cy="56" r="6" fill="#091019" />
+            <circle cx="82" cy="56" r="6" fill="#091019" />
+          </>
+        )}
+
+        {/* cool モード: サングラス + ニヤ口 */}
+        {personality === "cool" && (
+          <>
+            {/* サングラス（黒の長方形） */}
+            <rect x="36" y="50" width="22" height="10" rx="3" fill="#111" />
+            <rect x="70" y="50" width="22" height="10" rx="3" fill="#111" />
+            {/* サングラスのつなぎ部分 */}
+            <rect x="58" y="53" width="12" height="4" fill="#111" />
+            {/* ニヤっとした口 */}
+            <path
+              d="M46 78 Q64 88 82 78"
+              stroke="#111"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </>
+        )}
+      </svg>
+    </div>
+  );
+}
+
 
       function App({ personality }) {
         const [lang, setLang] = useState("ja");
@@ -422,7 +452,7 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
                 {t.remaining}: {formatTime(timeLeft)}
               </div>
          <div style={{ textAlign: "center", margin: "4px 0 4px 0" }}>
-  <GhostSVG />
+<GhostSVG color={PERSONALITIES[personality].color} personality={personality} />
 </div>
 
 <div className="chat" ref={chatRef}>
