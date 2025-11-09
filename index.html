@@ -259,6 +259,23 @@ button.send {
   95% { opacity: 0.6; }
 }
 
+#email-screen input:focus {
+  outline: none;
+  border: 2px solid #b392ff;
+  box-shadow: 0 0 8px rgba(179,146,255,0.6);
+  transition: 0.2s;
+}
+
+#email-screen {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.input-area.inactive {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+
     </style>
   </head>
 
@@ -477,7 +494,8 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
   ))}
 </div>
 
-              <div className="input-area">
+            <div className={`input-area ${!active ? "inactive" : ""}`}>
+
                 <input
                   className="msg"
                   value={input}
