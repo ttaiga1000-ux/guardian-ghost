@@ -344,13 +344,14 @@ button.send {
 function GhostSVG({ personality }) {
   const isKind = personality === "kind";
 
-  // 🎨 色と表情を設定
-const bodyColor = isKind ? "rgba(245,245,245,0.9)" : "rgba(173,216,230,0.9)";
-
+  // 🎨 それぞれの色と表情を変える
+  const bodyColor = isKind
+    ? "rgba(245,245,245,0.9)"  // kind：白っぽく
+    : "rgba(173,216,230,0.9)"; // cool：青系
   const eyeColor = isKind ? "#091019" : "#0c3a2d";
   const mouthStyle = isKind
-    ? "M50,78 Q64,88 78,78" // kindはニコ
-    : "M50,80 Q64,90 78,80"; // coolはニヤリ
+    ? "M50,78 Q64,88 78,78" // kind：にっこり
+    : "M50,82 Q64,72 78,82"; // cool：無表情
 
   return (
     <div
@@ -360,35 +361,33 @@ const bodyColor = isKind ? "rgba(245,245,245,0.9)" : "rgba(173,216,230,0.9)";
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        animation: isKind ? "float 3s ease-in-out infinite" : "blink 5s linear infinite",
+        animation: isKind
+          ? "float 3s ease-in-out infinite"
+          : "blink 5s linear infinite",
       }}
     >
       <svg viewBox="0 0 128 128" width="84" height="84">
-        {/* 👻 ゴーストの体 */}
+        {/* 👻 ゴーストボディ */}
         <path
           fill={bodyColor}
           d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
         />
 
-        {/* 👀 目 or サングラス */}
-        {isKind ? (
+        {/* 👀 目 */}
+        <circle cx="46" cy="56" r="6" fill={eyeColor} />
+        <circle cx="82" cy="56" r="6" fill={eyeColor} />
+
+        {/* 👄 口 */}
+        <path d={mouthStyle} stroke={eyeColor} strokeWidth="3" fill="none" />
+
+        {/* 😎 cool のときだけサングラス追加 */}
+        {!isKind && (
           <>
-            <circle cx="46" cy="56" r="6" fill={eyeColor} />
-            <circle cx="82" cy="56" r="6" fill={eyeColor} />
-          </>
-        ) : (
-          <>
-            {/* サングラス（黒い横線＋レンズ） */}
-            <rect x="38" y="50" width="52" height="8" rx="4" fill="#111" />
-            <rect x="38" y="50" width="20" height="8" rx="4" fill="#000000aa" />
-            <rect x="70" y="50" width="20" height="8" rx="4" fill="#000000aa" />
-            {/* ブリッジ */}
-            <rect x="58" y="52" width="12" height="4" fill="#111" />
+            <rect x="36" y="50" width="20" height="10" rx="3" fill="#111" />
+            <rect x="72" y="50" width="20" height="10" rx="3" fill="#111" />
+            <rect x="56" y="54" width="16" height="4" fill="#111" />
           </>
         )}
-
-        {/* 😏 口（kindは優しく、coolはニヤリ） */}
-        <path d={mouthStyle} stroke={eyeColor} strokeWidth="3" fill="none" />
       </svg>
     </div>
   );
