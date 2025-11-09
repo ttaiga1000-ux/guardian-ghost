@@ -273,6 +273,16 @@ button.send {
     <div id="ghost-app" class="screen">
       <div id="root"></div>
     </div>
+<!-- メール登録画面 -->
+<div id="email-screen" class="screen">
+  <h1>📧 メール通知を登録</h1>
+  <input type="email" id="emailInput" placeholder="メールアドレスを入力" style="padding:10px;width:80%;max-width:300px;border-radius:8px;border:none;margin-top:10px;">
+  <br/>
+  <button id="registerEmailBtn">登録</button>
+  <br/>
+  <button id="backToChat">戻る</button>
+</div>
+
 
     <script type="text/babel">
       const { useState, useEffect, useRef } = React;
@@ -386,12 +396,27 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
 
         return (
           <div className="phone">
-            <header className="app-header">
-              <div style={{ fontWeight: 700, fontSize: 16 }}>{t.title}</div>
-              <button className="lang-toggle" onClick={() => setLang(lang === "ja" ? "en" : "ja")}>
-                {lang === "ja" ? t.english : t.japanese}
-              </button>
-            </header>
+           <header className="app-header">
+  <div style={{ fontWeight: 700, fontSize: 16 }}>{t.title}</div>
+
+  {/* 📧 メールアイコン追加部分 */}
+  <div style={{ position: "absolute", right: "60px", top: "10px" }}>
+    <button
+      style={{ background: "transparent", border: "none", color: "#e6eef8", fontSize: "20px", cursor: "pointer" }}
+      onClick={() => {
+        document.getElementById("ghost-app").classList.remove("active");
+        document.getElementById("email-screen").classList.add("active");
+      }}
+    >
+      📧
+    </button>
+  </div>
+
+  <button className="lang-toggle" onClick={() => setLang(lang === "ja" ? "en" : "ja")}>
+    {lang === "ja" ? t.english : t.japanese}
+  </button>
+</header>
+
            <main className="chat-screen">
               <div style={{ textAlign: "center", fontSize: 13, color: "#94a3b8" }}>
                 {t.remaining}: {formatTime(timeLeft)}
@@ -509,6 +534,24 @@ if (chat) {
 
 window.addEventListener("focusin", scrollToBottom);
 window.addEventListener("resize", scrollToBottom);
+
+ // メール登録画面の戻るボタン動作
+  document.getElementById("backToChat").addEventListener("click", () => {
+    document.getElementById("email-screen").classList.remove("active");
+    document.getElementById("ghost-app").classList.add("active");
+  });
+
+  // メール登録ボタンの仮動作（今はアラートで確認）
+  document.getElementById("registerEmailBtn").addEventListener("click", () => {
+    const email = document.getElementById("emailInput").value.trim();
+    if (!email) {
+      alert("メールアドレスを入力してください。");
+      return;
+    }
+    alert("登録完了: " + email + " 👻");
+    document.getElementById("email-screen").classList.remove("active");
+    document.getElementById("ghost-app").classList.add("active");
+  });
 
     </script>
   </body>
