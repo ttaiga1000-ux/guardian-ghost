@@ -4,6 +4,63 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Guardian Ghost Demo</title>
+</head>
+
+ <body>
+    <h1>Guardian Ghost 登録フォーム</h1>
+    <input type="email" id="email" placeholder="メールアドレスを入力" />
+    <button onclick="registerEmail()">登録</button>
+<!-- Firebase SDK -->
+    <script type="module">
+      // Firebaseのライブラリを読み込み
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+     // 🔹ここにあなたのfirebaseConfigを貼り付けてください👇
+// Import the functions you need from the SDKs you need
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  // あなたのFirebase設定をここに貼ってください👇
+ // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCFOlj3yRFql7oDrjCSZ9iFdEiKuXGc9Yk",
+  authDomain: "guardian-ghost.firebaseapp.com",
+  projectId: "guardian-ghost",
+  storageBucket: "guardian-ghost.firebasestorage.app",
+  messagingSenderId: "431257152681",
+  appId: "1:431257152681:web:e7e66c1091b758a3598db8",
+  measurementId: "G-XYJT2SY7PS"
+};
+
+      // FirebaseアプリとFirestoreを初期化
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // フォーム送信処理
+      async function registerEmail() {
+        const email = document.getElementById("email").value;
+        try {
+          await addDoc(collection(db, "users"), { email: email });
+          alert("登録しました！");
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+      }
+
+      window.registerEmail = registerEmail;
+    </script>
+
+ 
 
     <!-- React + ReactDOM + Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -315,42 +372,17 @@ button.send {
         },
       };
 
-     function GhostSVG({ personality }) {
-  if (personality === "cool") {
-    // 😎 COOL GHOST (dark, with sunglasses)
-    return (
-      <div className="ghost">
-        <svg viewBox="0 0 128 128" width="84" height="84">
-          <path
-            fill="#3b82f6"
-            d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
-          />
-          {/* Sunglasses */}
-          <rect x="34" y="50" width="22" height="10" rx="3" fill="#000" />
-          <rect x="72" y="50" width="22" height="10" rx="3" fill="#000" />
-          <rect x="56" y="53" width="16" height="4" fill="#000" />
-          {/* Cool smile */}
-          <path d="M48 80q16 12 32 0" stroke="#000" strokeWidth="3" fill="none" />
-        </svg>
-      </div>
-    );
-  } else {
-    // 💜 KIND GHOST (white, gentle)
-    return (
-      <div className="ghost">
-        <svg viewBox="0 0 128 128" width="84" height="84">
-          <path
-            fill="#ffffff"
-            d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"
-          />
-          <circle cx="46" cy="56" r="6" fill="#091019" />
-          <circle cx="82" cy="56" r="6" fill="#091019" />
-        </svg>
-      </div>
-    );
-  }
-}
-
+      function GhostSVG({ color }) {
+        return (
+          <div className="ghost" style={{ backgroundColor: color, borderRadius: "50%" }}>
+            <svg viewBox="0 0 128 128">
+              <path fill="#fff" d="M64 8c-22 0-40 18-40 40v32c0 4 3 7 7 7 4 0 6-3 10-3s6 3 10 3 6-3 10-3 6 3 10 3 6-3 10-3 6 3 10 3c4 0 7-3 7-7V48c0-22-18-40-40-40z"/>
+              <circle cx="46" cy="56" r="6" fill="#091019" />
+              <circle cx="82" cy="56" r="6" fill="#091019" />
+            </svg>
+          </div>
+        );
+      }
 
       function App({ personality }) {
         const [lang, setLang] = useState("ja");
@@ -422,7 +454,7 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
                 {t.remaining}: {formatTime(timeLeft)}
               </div>
          <div style={{ textAlign: "center", margin: "4px 0 4px 0" }}>
-<GhostSVG personality={personality} />
+  <GhostSVG />
 </div>
 
 <div className="chat" ref={chatRef}>
@@ -538,9 +570,6 @@ window.addEventListener("resize", scrollToBottom);
     </script>
   </body>
 </html>
-
-
-
 
 
 
