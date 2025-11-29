@@ -595,22 +595,30 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
 let qrReader;
 
 
-     document.getElementById("scanButton").addEventListener("click", () => {
+document.getElementById("scanButton").addEventListener("click", () => {
   document.getElementById("start-screen").classList.remove("active");
   document.getElementById("scan-screen").classList.add("active");
 
-  // ✅ 少し待ってから startQR() 実行
-  setTimeout(() => {
-    startQR();
-  }, 500); // ← 0.5秒待機（これで #qr-reader が確実に描画される）
+  // 画面が完全に描画されてから実行する
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      startQR();
+    });
+  });
 });
 
 
    
 
-  function startQR() {
-    const qrResult = document.getElementById("qr-result");
-    qrReader = new Html5Qrcode("qr-reader");
+function startQR() {
+  const qrResult = document.getElementById("qr-result");
+
+  if (qrReader && qrReader._isScanning) {
+    qrReader.stop().catch(()=>{});
+  }
+
+  qrReader = new Html5Qrcode("qr-reader");
+
 
     qrReader.start(
       { facingMode: "environment" },
@@ -702,6 +710,7 @@ window.addEventListener("resize", scrollToBottom);
     </script>
   </body>
 </html>
+
 
 
 
