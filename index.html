@@ -136,7 +136,7 @@
 /* ---------- bubble visual ---------- */
 /* Use block layout so width control works reliably */
 .bubble {
-display: block;    
+display: inline-block;    
   max-width: calc(100% - 20px);
   padding: 12px 16px;
   border-radius: 18px;
@@ -281,7 +281,7 @@ button.send {
   <body>
     <!-- スタートメニュー画面 -->
     <div id="start-screen" class="screen active">
-      <h1>👻 Guardian Ghost</h1>
+      <h1> Guardian Ghost</h1>
       <p>ようこそ。ゴーストに会う準備はできた？</p>
       <button id="scanButton">スキャンモードを開始</button>
     </div>
@@ -636,6 +636,7 @@ window.addEventListener("resize", scrollToBottom);
     </script>
   </body>
 </html>
+
 
 
 
