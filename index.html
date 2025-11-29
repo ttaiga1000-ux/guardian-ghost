@@ -136,9 +136,8 @@
 /* ---------- bubble visual ---------- */
 /* Use block layout so width control works reliably */
 .bubble {
-  display: inline-block;
-  max-width: calc(100% - 40px);  /* ✅ much wider than before */
-  width: auto;
+display: block;    
+  max-width: min(85%, 320px);
   padding: 12px 16px;
   border-radius: 18px;
   font-size: 15px;
@@ -637,6 +636,7 @@ window.addEventListener("resize", scrollToBottom);
     </script>
   </body>
 </html>
+
 
 
 
