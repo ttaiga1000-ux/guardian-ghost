@@ -1,2 +1,2 @@
-# guardian-ghost
-“My ghost app with QR scanner”
+# my-care-app
+“care people”
