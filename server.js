@@ -1,23 +1,15 @@
 import express from "express";
-import cors from "cors";
+import bodyParser from "body-parser";
 import path from "path";
-import { fileURLToPath } from "url";
-import chatRouter from "./api/chat.js";
+import advice from "./api/advice.js";
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
 // API
-app.use("/api/chat", chatRouter);
+app.post("/api/advice", advice);
 
-// 静的ファイル（Vite build後）
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "dist")));
+// フロント
+app.use(express.static("dist"));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
-app.listen(3000, () => console.log("Server on http://localhost:3000"));
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
