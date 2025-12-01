@@ -335,94 +335,39 @@ button.send {
         },
       };
 
- const PERSONALITIES = {
-  kind: {
-    system: "You are a kind guardian ghost.",
-    replies: [
-      "大丈夫、私はここにいるよ 🌙",
-      "焦らないで、ゆっくりでいいんだよ。",
-      "あなたはよく頑張ってるね 💫",
-    ],
-    color: "rgba(179, 146, 255, 0.85)",
-  },
+      const PERSONALITIES = {
+        kind: {
+          system: "You are a kind guardian ghost.",
+          replies: [
+            "大丈夫、私はここにいるよ 🌙",
+            "焦らないで、ゆっくりでいいんだよ。",
+            "あなたはよく頑張ってるね 💫",
+          ],
+          color: "rgba(179, 146, 255, 0.85)",
+        },
+       cool: {
+  system: "You are a stylish, chill ghost with a mysterious charm.",
+  replies: [
+    "Yo, what's up? 😎",
+    "まぁ、焦んなって。",
+    "夜風が気持ちいいな…お前もそう思うだろ？🌙",
+  ],
+  color: "rgba(173,216,230,0.9)", // 水色系
+},
 
-  cool: {
-    system: "You are a stylish, chill ghost with a mysterious charm.",
-    replies: [
-      "Yo, what's up? 😎",
-      "まぁ、焦んなって。",
-      "夜風が気持ちいいな…お前もそう思うだろ？🌙",
-    ],
-    color: "rgba(173,216,230,0.9)",
-  },
+      };
 
-  funny: {
-    system: "You are a funny melon ghost wearing sunglasses.",
-    replies: [
-      "メロンだよ🍈😎 ちょっと甘くしてみる？",
-      "へいへい、どうしたんだい？サングラス越しでも元気なさそうだぞ〜",
-      "今日もジューシーにいこうぜ！🍈🔥",
-    ],
-    color: "rgba(255, 210, 90, 0.9)", // メロン×太陽みたいな色
-  },
-
-  elegant: {
-    system: "You are an elegant, sparkling ghost full of grace.",
-    replies: [
-      "ごきげんよう…今日という時間があなたに優しいものでありますように ✨",
-      "静けさの中にこそ、輝きは宿るのです。",
-      "姿勢を正すと、心の影も整っていきますよ…💎",
-    ],
-    color: "rgba(255, 240, 255, 0.9)", // キラキラ薄ピンク白
-  }
-};
-
-
-    function GhostSVG({ personality }) {
+     function GhostSVG({ personality }) {
   const isKind = personality === "kind";
-  const isCool = personality === "cool";
-  const isFunny = personality === "funny";
-  const isElegant = personality === "elegant";
 
-  // --- 身体の色 ---
-  let bodyColor = "rgba(255,255,255,0.8)";
-  if (isCool) bodyColor = "rgba(173,216,230,0.8)";
-  if (isFunny) bodyColor = "rgba(255,230,120,0.9)"; // メロン
-  if (isElegant) bodyColor = "rgba(255,245,255,0.95)"; // 淡いピンク白
+  // それぞれの色と表情を変える
+  const bodyColor = isKind  ? "rgba(255,255,255,0.8)" // kind：透けた白
+    : "rgba(173,216,230,0.8)"; // cool：薄い青
 
-  // --- 目の色 ---
-  let eyeColor = "#0a0a0a";
-  if (isCool) eyeColor = "#001a33";
-  if (isElegant) eyeColor = "#442244";
-
-  // --- 口の形 ---
-  let mouthStyle = "M50,78 Q64,88 78,78";
-  if (isCool) mouthStyle = "M50,80 L78,80";
-  if (isFunny) mouthStyle = "M50,78 Q64,70 78,78"; // ちょっとニヤっと
-  if (isElegant) mouthStyle = "M50,78 Q64,82 78,78"; // 上品な微笑み
-
-  // --- オプション装飾（アクセサリー） ---
-  let accessories = null;
-
-  if (isFunny) {
-    accessories = (
-      <>
-        <rect x="36" y="54" width="22" height="12" rx="3" fill="rgba(0,0,0,0.7)" />
-        <rect x="70" y="54" width="22" height="12" rx="3" fill="rgba(0,0,0,0.7)" />
-        <line x1="58" y1="60" x2="70" y2="60" stroke="rgba(0,0,0,0.7)" strokeWidth="2" />
-      </>
-    );
-  }
-
-  if (isElegant) {
-    accessories = (
-      <>
-        <circle cx="30" cy="32" r="3" fill="rgba(255,255,255,0.9)" />
-        <circle cx="96" cy="36" r="2" fill="rgba(255,255,255,0.8)" />
-        <circle cx="80" cy="18" r="2" fill="rgba(255,255,255,0.7)" />
-      </>
-    );
-  }
+  const eyeColor = isKind ? "#0a0a0a" : "#001a33";
+  const mouthStyle = isKind
+    ? "M50,78 Q64,88 78,78" // kind：にっこり
+    : "M50,80 L78,80"; // cool：まっすぐ
 
   return (
     <div
@@ -432,44 +377,33 @@ button.send {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        animation:
-          isKind ? "float 3s ease-in-out infinite"
-        : isElegant ? "glow 4s ease-in-out infinite"
-        : "blink 5s linear infinite",
+        animation: isKind ? "float 3s ease-in-out infinite" : "blink 5s linear infinite",
       }}
     >
       <svg viewBox="0 0 128 128" width="84" height="84">
+       <path
+  fill={bodyColor}
+  d="
+    M64 8
+    c-22 0-40 18-40 40
+    v40
+    c0 0 5-6 10-4
+    s6 6 10 4
+    s8-8 14-5
+    s6 9 10 5
+    s7-7 12-3
+    s5 7 10 4
+    c5-3 8 4 8 4
+    v-45
+    c0-22-18-40-40-40z
+  "
+/>
 
-        {/* body */}
-        <path
-          fill={bodyColor}
-          d="
-            M64 8
-            c-22 0-40 18-40 40
-            v40
-            c0 0 5-6 10-4
-            s6 6 10 4
-            s8-8 14-5
-            s6 9 10 5
-            s7-7 12-3
-            s5 7 10 4
-            c5-3 8 4 8 4
-            v-45
-            c0-22-18-40-40-40z
-          "
-        />
-
-        {/* eyes */}
-        {!isFunny && (
-          <>
-            <circle cx="46" cy="56" r="6" fill={eyeColor} />
-            <circle cx="82" cy="56" r="6" fill={eyeColor} />
-          </>
-        )}
-
-        {/* accessories */}
-        {accessories}
-
+        <circle cx="46" cy="56" r="6" fill={eyeColor} />
+        <circle cx="82" cy="56" r="6" fill={eyeColor} />
+<rect x="36" y="54" width="22" height="12" rx="3" fill="rgba(0,0,0,0.6)" /> {/* 左目のサングラス */}
+<rect x="70" y="54" width="22" height="12" rx="3" fill="rgba(0,0,0,0.6)" /> {/* 右目のサングラス */}
+<line x1="58" y1="60" x2="70" y2="60" stroke="rgba(0,0,0,0.6)" strokeWidth="2" /> {/* フレーム */}
         <path d={mouthStyle} stroke={eyeColor} strokeWidth="3" fill="none" />
       </svg>
     </div>
@@ -595,30 +529,22 @@ setMessages(prev => [...prev, { from: "ghost", text: data.reply }]);
 let qrReader;
 
 
-document.getElementById("scanButton").addEventListener("click", () => {
+     document.getElementById("scanButton").addEventListener("click", () => {
   document.getElementById("start-screen").classList.remove("active");
   document.getElementById("scan-screen").classList.add("active");
 
-  // 画面が完全に描画されてから実行する
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      startQR();
-    });
-  });
+  // ✅ 少し待ってから startQR() 実行
+  setTimeout(() => {
+    startQR();
+  }, 500); // ← 0.5秒待機（これで #qr-reader が確実に描画される）
 });
 
 
    
 
-function startQR() {
-  const qrResult = document.getElementById("qr-result");
-
-  if (qrReader && qrReader._isScanning) {
-    qrReader.stop().catch(()=>{});
-  }
-
-  qrReader = new Html5Qrcode("qr-reader");
-
+  function startQR() {
+    const qrResult = document.getElementById("qr-result");
+    qrReader = new Html5Qrcode("qr-reader");
 
     qrReader.start(
       { facingMode: "environment" },
@@ -710,9 +636,6 @@ window.addEventListener("resize", scrollToBottom);
     </script>
   </body>
 </html>
-
-
-
 
 
 
