@@ -1,20 +1,23 @@
 {
-  "name": "g",
+  "name": "care-context-ai",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "dev": "concurrently \"npm:server\" \"npm:vite\"",
+    "server": "node server.js",
+    "vite": "vite",
+    "build": "vite build",
+    "start": "NODE_ENV=production node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0",
-    "html5-qrcode": "^2.3.8",
-    "node-fetch": "^3.3.2"
+    "express": "^4.18.2",
+    "openai": "^4.56.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "vite": "^5.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
